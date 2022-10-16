@@ -540,7 +540,7 @@ public:
 
  }
 // same as BFS but here we are using stack in place of queue
- void Iterative_DFS(vector <Edge_No_wtt> graph[] ,int src, vector<bool> &visited){
+ void Iterative_DFS(vector <Edge> graph[] ,int src, vector<bool> &visited){
 
     stack<pair<int, string>>st;
     st.push({src, to_string(src)});
