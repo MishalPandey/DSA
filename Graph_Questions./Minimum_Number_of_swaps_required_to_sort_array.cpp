@@ -27,9 +27,9 @@ int main(){
             cy_len++;
             j= v[j].second;
         }
-        ans+=cy_len-1;
+        moves+=cy_len-1;
     }
-    cout<<ans<<nl;
+    cout<<moves<<nl;
 
 
 }
