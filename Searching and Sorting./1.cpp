@@ -194,9 +194,59 @@ void Quick_Sort(vector<int> & arr, int low, int high){
 
         }
 
+        arr = Sorted_arr;
+}
+
+// 7. Radix Sort
+void Count_Sort(vector<int>& arr, int exp) {
+        int n= arr.size();
+        //min =0, range =10;
+        vector<int> freq_arr(10, 0);
+
         for (int i = 0; i < n; ++i)
         {
-            arr[i]= Sorted_arr[i];
+            freq_arr[arr[i] / exp % 10]++;
+        }
+
+        for (int i = 1; i < 10; ++i)
+        {
+            freq_arr[i]= freq_arr[i] + freq_arr[i-1];
+        }
+        
+
+        vector<int> Sorted_arr(n, 0);
+
+        for (int i = n-1; i >=0 ; --i)
+        {
+            int pos = freq_arr[arr[i] / exp % 10];
+            int idx = pos -1;
+            Sorted_arr[idx] = arr[i];
+            freq_arr[arr[i] / exp % 10]--;
+
+        }
+
+        arr = Sorted_arr;
+}
+
+void Radix_Sort(vector<int>& arr)
+{
+        int max = INT_MIN;
+        for(int val: arr)
+        {
+            if(val> max)
+            {
+              max= val;
+            }
+        }
+
+        int exp =1;
+        while(exp<= max)
+        {
+            Count_Sort(arr, exp);
+            exp = exp*10;
         }
 }
+//8. Heap Sort(Heapify)
+//9. Shell Sort
+//10. Wave Sort
 
