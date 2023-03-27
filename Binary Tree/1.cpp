@@ -494,6 +494,100 @@ Node* Remove_Leaves(Node* node)
 
 }
 
+int height(Node* node)
+{
+		if(node== nullptr)
+			return -1; //for edges
+
+		int left_height = height(node->left);
+		int right_height =  height(node->right);
+		int total_height =  max(left_height, right_height) + 1;
+
+		return total_height;
+	
+}
+//Important and hard*****
+
+int diameter1(Node* node)
+{
+
+	if(node== nullptr)
+	{
+		return 0;
+	}
+	//maximum distance between two nodes of lhs
+	int ld= diameter1(node->left);
+
+	//maximum distance between two nodes of rhs
+	int rd= diameter1(node->right);
+
+	//maximum distance between left's deepest and right's deepest
+
+	int f = height(node->left)  + height(node->right) + 2;
+
+	int dia = max(f, max(ld, rd));
+
+	return dia;
+}
+
+class DiaPair
+{
+	public:
+		int ht;
+		int dia;
+
+};
+
+DiaPair diameter2(Node* node)
+{
+	if(node ==nullptr)
+	{
+		DiaPair bp; // base pair
+		bp.ht =-1;
+		bp.dia= 0;
+		return bp;
+	}
+	DiaPair lp = diameter2(node->left); //left pair
+	DiaPair rp = diameter2(node->right); //right pair
+
+	DiaPair mp;
+	mp.ht = max(lp.ht, rp.ht) + 1;
+
+	int fes = lp.ht + rp.ht + 2; // factor on either side
+	mp.dia = max(fes, max(lp.dia, rp.dia));
+
+	return mp;
+}
+
+//Chahiye kuch aur return kuch aur kare
+
+int tilt = 0;
+int tilt_B_T (Node* node)
+{
+
+		if(node==nullptr)
+		{
+			return 0;
+		}
+
+		//will return left's sum and change tilt for left side
+		int ls = tilt_B_T(node->left); // left sum
+
+		//will return right's sum and change tilt for right side
+		int rs = tilt_B_T(node->right); // right sum
+
+		int ltilt = abs(ls - rs);
+		tilt+= ltilt;
+
+		int ts= ls + rs + node->data;
+		return ts;
+
+
+
+}
+
+
+
 int main() {
   
   int v[]={50, 25, 12, -1,-1, 37, 30, -1, -1, -1, 75 , 62, -1, 70, -1, -1, 87, -1, -1};
