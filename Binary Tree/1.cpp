@@ -1,5 +1,3 @@
-// Pepcoding
-
 #include<bits/stdc++.h>
 using namespace std;
 #define nl '\n'
@@ -494,6 +492,36 @@ Node* Remove_Leaves(Node* node)
 
 }
 
+//change return statergy (chahiye kuch aur hota aur return kuch aur kara rahe hote)
+//taki return wali chinz se jo chahiye woh nikal sake
+
+int tilt = 0;
+int tilt_B_T (Node* node)
+{
+
+		if(node==nullptr)
+		{
+			return 0;
+		}
+
+		//will return left's sum and change tilt for left side
+		int ls = tilt_B_T(node->left); // left sum
+
+		//will return right's sum and change tilt for right side
+		int rs = tilt_B_T(node->right); // right sum
+
+		int ltilt = abs(ls - rs);
+		tilt+= ltilt;
+
+		int ts= ls + rs + node->data;
+		return ts;
+
+
+
+}
+
+//Important and hard diameter of binary tree*****
+
 int height(Node* node)
 {
 		if(node== nullptr)
@@ -506,7 +534,6 @@ int height(Node* node)
 		return total_height;
 	
 }
-//Important and hard*****
 
 int diameter1(Node* node)
 {
@@ -559,48 +586,247 @@ DiaPair diameter2(Node* node)
 	return mp;
 }
 
-//Chahiye kuch aur return kuch aur kare
 
-int tilt = 0;
-int tilt_B_T (Node* node)
+// is Binary Search Tree
+class BSTPair{
+public:
+	bool is_BST;
+	int min;
+	int max;
+};
+
+BSTPair isBST(Node* node)
 {
 
-		if(node==nullptr)
-		{
-			return 0;
-		}
+	if(node == nullptr)
+	{
+		BSTPair bp; //base pair
+		bp.is_BST= true;
+		bp.min= INT_MAX;
+		bp.max= INT_MIN;
+		return bp;
 
-		//will return left's sum and change tilt for left side
-		int ls = tilt_B_T(node->left); // left sum
+	}
+	BSTPair lp = isBST(node->left); //left tree ki tarah bst hai
+	BSTPair rp = isBST(node->right); //right tree ki tarah bst hai
 
-		//will return right's sum and change tilt for right side
-		int rs = tilt_B_T(node->right); // right sum
+	BSTPair mp; //my pair
+	mp.is_BST = lp.is_BST && rp.is_BST && (node->data >= lp.max && node->data <= rp.min);
+	// tumhara left tree ki tarah bst hai and right bhi tree ki tarah bst hai
+	//and tum as a node bhi bst ho toh tum as a tree bst ho
 
-		int ltilt = abs(ls - rs);
-		tilt+= ltilt;
+	mp.min = min(node->data, min(lp.min, rp.min));
+	mp.max = max(node->data, max(lp.max, rp.max));
+	// apana min, max dono esliye calculate kar rha kyuki kya pata mere parent ka
+	//mai left child hu ya right toh dono calculate kar leta hoon safe rahunga
 
-		int ts= ls + rs + node->data;
-		return ts;
+	return mp;
 
+
+}
+
+//is Balanced Binary Tree
+class BBTPair{
+	public:
+		int ht;
+		bool is_balanced;
+};
+
+BBTPair isBalanced(Node* node)
+{
+
+	if(node== nullptr)
+	{
+		BBTPair bp; //base pair
+		bp.is_balanced= true;
+		bp.ht= 0;
+		return bp;
+
+	}
+
+	BBTPair lp = isBalanced(node->left);
+	BBTPair rp = isBalanced(node->right);
+
+	BBTPair mp; //my pair
+	mp.ht = max(lp.ht, rp.ht) + 1;
+	mp.is_balanced = lp.is_balanced && rp.is_balanced && (abs(lp.ht - rp.ht)<= 1);
+
+	return mp;
+
+
+}
+
+//change return statergy (chahiye kuch aur hota aur return kuch aur kara rahe hote)
+//taki return wali chinz se jo chahiye woh nikal sake
+
+bool is_Balanced2 = true;
+
+int isBalanced2(Node* node)
+{
+
+	if(node== nullptr)
+	{
+		return 0;
+	}
+	int lh = isBalanced2(node->left);
+	int rh = isBalanced2(node->right); 
+
+	if(abs(lh - rh)> 1)
+	{
+		is_Balanced2 = false;
+	}
+
+	int th = max(lh, rh) + 1; //this height
+	return th;
+}
+
+
+//Largest BST Subtree (root, size)
+//reference from isBST question
+//As a Pointer return typeeeeeeeeeeeeeeeeeeeeeeeeeee
+
+
+
+class BSTPair2{
+public:
+	bool is_BST2;
+	int min;
+	int max;
+
+	Node* root= nullptr;
+	int size;
+
+};
+
+BSTPair2* isBST2(Node* node)
+{
+
+	if(node == nullptr)
+	{
+		BSTPair2* bp = new BSTPair2; //base pair
+		bp->is_BST2= true;
+		bp->min= INT_MAX;
+		bp->max= INT_MIN;
+		bp->root = nullptr;
+		bp->size= 0;
+		return bp;
+
+	}
+	BSTPair2* lp = isBST2(node->left); 
+	BSTPair2* rp = isBST2(node->right); 
+
+	BSTPair2* mp = new BSTPair2; //my pair
+	mp->is_BST2 = lp->is_BST2 && rp->is_BST2 && (node->data >= lp->max && node->data <= rp->min);
+	
+	mp->min = min(node->data, min(lp->min, rp->min));
+	mp->max = max(node->data, max(lp->max, rp->max));
+	
+
+
+
+	if(mp->is_BST2)
+	{
+		mp->root = node;
+		mp->size = lp->size + rp->size +1;
+	}
+	else if(lp->size > rp->size){
+		mp->root = lp->root;
+		mp->size = lp->size;
+
+	}
+	else{
+		mp->root = rp->root;
+		mp->size = rp->size;
+
+	}
+
+
+	return mp;
+
+
+}
+
+//Largest BST Subtree (root, size)
+//reference from isBST question
+//As an Onject return typeeeeeeeeeeeeeeeeeeeeeeeeeee
+
+
+
+
+class BSTPair22{
+public:
+	bool is_BST22;
+	int min;
+	int max;
+
+	Node* root= nullptr;
+	int size;
+
+};
+
+BSTPair22 isBST22(Node* node)
+{
+
+	if(node == nullptr)
+	{
+		BSTPair22 bp; //base pair
+		bp.is_BST22= true;
+		bp.min= INT_MAX;
+		bp.max= INT_MIN;
+		bp.root = nullptr;
+		bp.size= 0;
+		return bp;
+
+	}
+	BSTPair22 lp = isBST22(node->left); 
+	BSTPair22 rp = isBST22(node->right); 
+
+	BSTPair22 mp; //my pair
+	mp.is_BST22 = lp.is_BST22 && rp.is_BST22 && (node->data >= lp.max && node->data <= rp.min);
+	
+	mp.min = min(node->data, min(lp.min, rp.min));
+	mp.max = max(node->data, max(lp.max, rp.max));
+	
+
+
+
+	if(mp.is_BST22)
+	{
+		mp.root = node;
+		mp.size = lp.size + rp.size +1;
+	}
+	else if(lp.size > rp.size){
+		mp.root = lp.root;
+		mp.size = lp.size;
+
+	}
+	else{
+		mp.root = rp.root;
+		mp.size = rp.size;
+
+	}
+
+
+	return mp;
 
 
 }
 
 
-
 int main() {
   
-  int v[]={50, 25, 12, -1,-1, 37, 30, -1, -1, -1, 75 , 62, -1, 70, -1, -1, 87, -1, -1};
+  //int v[]={50, 25, 12, -1,-1, 37, 30, -1, -1, -1, 75 , 62, -1, 70, -1, -1, 87, -1, -1};
   // for (int i = 0; i < n; ++i)
   // {
 	 //  	int x; cin>>x;
 	 //  	v.push_back(x);
   // }
-  Node* root= Contruct(v, 19);
+ // Node* root= Contruct(v, 19);
 
   
   //Display(root);
  // cout<<Size(root)<<" "<<Height(root)<<" "<<Max(root)<<" "<<Sum(root)<<nl;
+
 
   //level_order_traversal(root);
  // iterative_Pre_Post_In_traversal(root);
@@ -631,7 +857,58 @@ int main() {
   //Node* root= Contruct(v1, 17);
   //print_single_child_node(root);
 
+
   
+
+  	// int x= tilt_B_T(root);
+  	// cout<<tilt;
+
+  
+  	// DiaPair ap= diameter2(root); // ans pair
+	
+	  // cout<<diameter1(root)<<nl;
+	  // cout<<ap.dia<<nl;
+
+
+	// int v[]={50, 25, 12, -1, -1, 37, -1, -1, 75, 62, -1, -1, 87, -1, -1};
+	//  Node* root= Contruct(v, 15);
+
+	//  BSTPair ap = isBST(root);
+	//  cout<<ap.is_BST<<nl;
+
+
+	// int v[]={50, 25, 12, -1, -1, 37, 30, -1, -1, 40, -1, -1, 75, 62, 60, -1, -1, 77, -1, -1, 87, -1, -1};
+	//  Node* root= Contruct(v, 23);
+
+	//   BBTPair ap = isBalanced(root);
+	//  cout<<ap.is_balanced<<nl;
+
+
+	int v[]={50, 25, 12, -1, -1, 37, -1, -1, 75, 62, -1, -1, 87, -1, -1};
+	 //int v[]={50, 25, 12, -1, -1, 37, 30, -1, -1, 40, -1, -1, 75, 62, 60, -1, -1, 70, -1, -1, 87, -1, -1};
+	 //int v[]={50, 25, 12, -1, -1, 37, 30, -1, -1, 40, -1, -1, 75, 62, 60, -1, -1, 77, -1, -1, 87, -1, -1};
+	// int v[]={90, 25, 12, -1, -1, 37, 30, -1, -1, 40, -1, -1, 75, 62, 60, -1, -1, 70, -1, -1, 87, -1, -1}; //ans:- 75@5 or 25@5
+	 Node* root= Contruct(v, 23);
+
+	  BSTPair2* ap = new BSTPair2;
+	  ap = isBST2(root);
+	 cout<<ap->root->data<<"@"<<ap->size<<nl;
+
+
+
+
+
+
+	int v22[]={50, 25, 12, -1, -1, 37, -1, -1, 75, 62, -1, -1, 87, -1, -1};
+	 //int v22[]={50, 25, 12, -1, -1, 37, 30, -1, -1, 40, -1, -1, 75, 62, 60, -1, -1, 70, -1, -1, 87, -1, -1};
+	// int v22[]={50, 25, 12, -1, -1, 37, 30, -1, -1, 40, -1, -1, 75, 62, 60, -1, -1, 77, -1, -1, 87, -1, -1};
+	// int v22[]={90, 25, 12, -1, -1, 37, 30, -1, -1, 40, -1, -1, 75, 62, 60, -1, -1, 70, -1, -1, 87, -1, -1}; //ans:- 75@5 or 25@5
+	 Node* root22= Contruct(v22, 23);
+
+	  BSTPair22 ap22 ;
+	  ap22 = isBST22(root22);
+	 cout<<ap22.root->data<<"@"<<ap22.size<<nl;
+
 
 
 
