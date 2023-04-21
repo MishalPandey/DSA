@@ -1,3 +1,5 @@
+//Using Recursion
+
 #include <iostream>
 using namespace std;
 
@@ -24,4 +26,38 @@ int main(){
     cin>>n;
     cout<<FibMemoized(n)<<endl;
     return 0;
+}
+
+//Using Tabulation
+
+#include <bits/stdc++.h>
+using namespace std;
+
+#define nl "\n"
+
+int main()
+{
+
+	  ios_base::sync_with_stdio(false);
+	  cin.tie(NULL); cout.tie(NULL);
+
+	  int n; cin>>n;
+
+	  int dp[n + 1];
+	  dp[0] = 0, dp[1]= 1;
+
+		  
+        for (int i = 2; i <= n; ++i)
+        {
+
+                dp[i]= dp[i-1]+ dp[i-2];
+            
+        }
+	  cout<<dp[n]<<nl;
+	  
+
+
+
+
+
 }
