@@ -48,7 +48,7 @@ int CountPathsTab(int n){
             dp[i]= dp[i-1];
         }
         else if(i==2){
-            dp[i]= dp[i-2]+ dp[i-2];
+            dp[i]= dp[i-1]+ dp[i-2];
         }
         else{
             dp[i]= dp[i-1]+ dp[i-2]+ dp[i-3];
