@@ -36,7 +36,7 @@ int main()
 	    	{
 	    
 			           	
-			    dp[j] += dp[j - arr[i]];
+			    dp[j] += dp[j - array[i]];
 
 			           			
 	        }
